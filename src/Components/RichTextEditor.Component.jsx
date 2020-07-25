@@ -4,24 +4,22 @@ import React, { useState, useMemo, useCallback } from "react";
 import { Slate, Editable, withReact } from "slate-react";
 import { createEditor } from "slate";
 
-// MUI
-import { AppBar, Toolbar } from "@material-ui/core";
-
 // Components
 import Leaf from "./Leaf.Component";
-import MarkButton from "./MarkButton.Component";
-
-// Icons
-import FormatBoldRoundedIcon from "@material-ui/icons/FormatBoldRounded";
-import FormatItalicRoundedIcon from "@material-ui/icons/FormatItalicRounded";
-import FormatUnderlinedRoundedIcon from "@material-ui/icons/FormatUnderlinedRounded";
+import CustomElement from "./CustomElement.Component";
+import TextEditorToolbar from "./TextEditorToolbar.Component";
+import { withImages } from "./ImageElement.Component";
+import { withVideo } from "./VideoElement.Component";
 
 const RichTextEditor = () => {
-	const editor = useMemo(() => withReact(createEditor()), []);
+	const editor = useMemo(
+		() => withVideo(withImages(withReact(createEditor()))),
+		[]
+	);
 	const [content, setContent] = useState([
 		{
 			type: "paragraph",
-			children: [{ text: "A paragraph." }],
+			children: [{ text: "" }],
 		},
 	]);
 
@@ -33,22 +31,19 @@ const RichTextEditor = () => {
 		return <Leaf {...props} />;
 	}, []);
 
+	const renderElement = useCallback((props) => {
+		return <CustomElement {...props} />;
+	}, []);
+
 	return (
 		<Slate editor={editor} value={content} onChange={handleContentChange}>
-			<AppBar position="relative">
-				<Toolbar variant="dense">
-					<MarkButton format="bold">
-						<FormatBoldRoundedIcon />
-					</MarkButton>
-					<MarkButton format="italic">
-						<FormatItalicRoundedIcon />
-					</MarkButton>
-					<MarkButton format="underline">
-						<FormatUnderlinedRoundedIcon />
-					</MarkButton>
-				</Toolbar>
-			</AppBar>
-			<Editable renderLeaf={renderLeaf} />
+			<TextEditorToolbar />
+			<Editable
+				renderLeaf={renderLeaf}
+				renderElement={renderElement}
+				placeholder="Enter some text..."
+				autoFocus
+			/>
 		</Slate>
 	);
 };

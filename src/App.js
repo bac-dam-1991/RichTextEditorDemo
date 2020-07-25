@@ -9,7 +9,7 @@ import RichTextEditor from "./Components/RichTextEditor.Component";
 const App = () => {
 	return (
 		<div className="App">
-			<Container maxWidth="sm">
+			<Container maxWidth="md">
 				<RichTextEditor />
 			</Container>
 		</div>

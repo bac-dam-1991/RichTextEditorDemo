@@ -16,7 +16,8 @@ const MarkButton = (props) => {
 
 	return (
 		<IconButton
-			onMouseDown={handleMouseDown}
+			size="small"
+			onClick={handleMouseDown}
 			color={isActive ? "secondary" : "inherit"}
 		>
 			{children}
